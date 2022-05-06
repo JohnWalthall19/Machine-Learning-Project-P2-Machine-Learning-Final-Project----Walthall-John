@@ -58,6 +58,7 @@ x_data = df.drop( columns=["MntWines", "MntTotal", "MntRegularProds"] )
 y_data = df["MntWines"]
 
 # 8. Using a scaling/normalization library of your choice, scale / normalize your data 
+
 feat_names = x_data.columns
 scaler = StandardScaler()
 x_data = scaler.fit_transform(x_data)
@@ -125,9 +126,6 @@ The range of residuals increases as the predicted value gets larger.
 # typically plot this, and explore the performance on your own. I am giving flexibility here
 # as long as I see you did some research.
 
-# 6. Make an argument for which of the two models for the problem type you chose works
-# better in this case
-
 scores_train = []
 scores_test = []
 
@@ -144,8 +142,11 @@ for i in range( 20, 100, 10 ):
     print( f"Training with {i}% test: {reg.score( x_test, y_test )*100}% accuracy" )
 
 plt.plot( [ x for x in range(len(scores_train)) ], scores_train, scores_test );
-#plt.show()
-print( scores_train, scores_test );
+plt.show()
+
+# 6. Make an argument for which of the two models for the problem type you chose works
+# better in this case
+
 """
 In this case, I would argue that linear regression is a better choice for this problem.
 There is no need for the optimizations provided by SGDRegression in this case, both
