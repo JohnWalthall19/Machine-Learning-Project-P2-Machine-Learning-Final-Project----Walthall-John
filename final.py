@@ -7,6 +7,7 @@ import matplotlib.pyplot    as plt
 from sklearn                    import linear_model
 from sklearn.preprocessing      import StandardScaler
 from sklearn.model_selection    import train_test_split
+from sklearn.metrics            import mean_squared_error
 
 from yellowbrick.regressor import ResidualsPlot
 
@@ -107,6 +108,7 @@ plt.show()
 #visual.fit( x_train, y_train )
 #visual.score( x_test, y_test )
 #visual.show()
+#visual.savefig("residuals.png")
 
     # a. Write a few sentences analyzing this plot.
 
@@ -126,12 +128,24 @@ The range of residuals increases as the predicted value gets larger.
 # 6. Make an argument for which of the two models for the problem type you chose works
 # better in this case
 
+scores_train = []
+scores_test = []
+
 for i in range( 20, 100, 10 ):
     x_train, x_test, y_train, y_test = train_test_split( x_data, y_data, test_size=float(i)/100.0, random_state=5 )
     reg = linear_model.SGDRegressor()
     reg = reg.fit( x_train, y_train )
+
+    ypred_train = reg.predict( x_train )
+    ypred_test = reg.predict( x_test )
+
+    scores_train.append( mean_squared_error( y_train, ypred_train ) )
+    scores_test.append( mean_squared_error( y_test, ypred_test ) )
     print( f"Training with {i}% test: {reg.score( x_test, y_test )*100}% accuracy" )
 
+plt.plot( [ x for x in range(len(scores_train)) ], scores_train, scores_test );
+#plt.show()
+print( scores_train, scores_test );
 """
 In this case, I would argue that linear regression is a better choice for this problem.
 There is no need for the optimizations provided by SGDRegression in this case, both
